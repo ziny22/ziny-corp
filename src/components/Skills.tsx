@@ -8,9 +8,9 @@ export default function Skills() {
     >
       <div className="mx-auto max-w-4xl">
         <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          기술 스택
+          Leadership &amp; Product Stack
         </h2>
-        <div className="mt-10 grid gap-8 sm:grid-cols-3">
+        <div className="mt-10 grid gap-8 sm:grid-cols-2">
           {skills.map((group) => (
             <div key={group.category}>
               <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">

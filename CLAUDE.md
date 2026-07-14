@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
+
 Personal portfolio website: a single-page Next.js (App Router) site with four sections — About, Projects, Skills, Contact. Built with **Next.js 16**, **TypeScript**, and **Tailwind CSS v4**.
 
 ## Commands
