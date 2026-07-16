@@ -1,7 +1,17 @@
 import Image from "next/image";
-import { history, profile } from "@/data/portfolio";
+import Link from "next/link";
+import { getCareers } from "@/db/queries";
+import { profile } from "@/data/portfolio";
+import { getCurrentUser } from "@/lib/auth";
 
-export default function Hero() {
+function formatYearMonth(date: string) {
+  const [year, month] = date.split("-");
+  return `${year}.${month}`;
+}
+
+export default async function Hero() {
+  const [careers, user] = await Promise.all([getCareers(), getCurrentUser()]);
+
   return (
     <section
       id="about"
@@ -36,16 +46,28 @@ export default function Hero() {
             </p>
           ))}
           <hr className="mt-7 w-full border-t border-zinc-300 dark:border-zinc-700" />
-          <ul className="mt-7 flex w-full list-disc flex-col gap-2 pl-5 text-left">
-            {history.map((item) => (
+          <div className="mt-7 flex w-full items-center justify-between">
+            <h2 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">경력</h2>
+            {user && (
+              <Link
+                href="/admin/careers/new"
+                className="text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+              >
+                + 경력 추가
+              </Link>
+            )}
+          </div>
+          <ul className="flex w-full list-disc flex-col gap-2 pl-5 text-left">
+            {careers.map((career) => (
               <li
-                key={item.period}
+                key={career.id}
                 className="text-base leading-7 text-zinc-600 dark:text-zinc-400"
               >
                 <span className="font-medium text-zinc-950 dark:text-zinc-50">
-                  {item.period}
+                  {formatYearMonth(career.startDate)} ~{" "}
+                  {career.endDate ? formatYearMonth(career.endDate) : "현재"}
                 </span>{" "}
-                {item.role}
+                {career.company} {career.title}
               </li>
             ))}
           </ul>

@@ -1,16 +1,35 @@
-import { projects } from "@/data/portfolio";
+import Link from "next/link";
+import { getProjects } from "@/db/queries";
+import { getCurrentUser } from "@/lib/auth";
 
-export default function Projects() {
+function formatYearMonth(date: string) {
+  const [year, month] = date.split("-");
+  return `${year}.${month}`;
+}
+
+export default async function Projects() {
+  const [projects, user] = await Promise.all([getProjects(), getCurrentUser()]);
+
   return (
     <section id="projects" className="scroll-mt-16 px-6 py-24">
       <div className="mx-auto max-w-4xl">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
-          프로젝트
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+            프로젝트
+          </h2>
+          {user && (
+            <Link
+              href="/admin/projects/new"
+              className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+            >
+              + 프로젝트 추가
+            </Link>
+          )}
+        </div>
         <div className="mt-10 grid gap-6">
           {projects.map((project) => (
             <article
-              key={project.title}
+              key={project.id}
               className="flex flex-col gap-3 rounded-xl border border-black/[.08] p-6 transition-colors hover:border-indigo-400 dark:border-white/[.12] dark:hover:border-indigo-500"
             >
               <div className="flex flex-col gap-1">
@@ -18,7 +37,8 @@ export default function Projects() {
                   {project.title}
                 </h3>
                 <p className="text-xs font-medium text-indigo-500 dark:text-indigo-400">
-                  {project.period}
+                  {formatYearMonth(project.startDate)} ~{" "}
+                  {project.endDate ? formatYearMonth(project.endDate) : "현재"}
                 </p>
               </div>
               <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
